@@ -1,0 +1,44 @@
+from fastapi import FastAPI, HTTPException
+from app.models import TodoItem
+from app.schemas import TodoItemCreate, TodoItemUpdate
+from app.crud import create_todo, get_todo_by_id, get_all_todos, update_todo_by_id, delete_todo_by_id
+
+
+app = FastAPI()
+
+
+@app.post("/todos/")
+async def create_todo_item(todo: TodoItemCreate):
+    new_todo = await create_todo(TodoItem(**todo.dict()))
+    return new_todo
+
+
+@app.get("/todos/{id}")
+async def read_todo_item(id: str):
+    todo = await get_todo_by_id(id)
+    if todo is None:
+        raise HTTPException(status_code=404, detail="Todo item not found")
+    return todo
+
+
+@app.get("/todos/")
+async def read_all_todos():
+    todos = await get_all_todos()
+    return todos
+
+
+@app.put("/todos/{id}")
+async def update_todo_item(id: str, todo: TodoItemUpdate):
+    updated_todo = await update_todo_by_id(id, todo.dict(exclude_unset=True))
+    if updated_todo is None:
+        raise HTTPException(status_code=404, detail="Todo item not found")
+    return updated_todo
+
+
+@app.delete("/todos/{id}")
+async def delete_todo_item(id: str):
+    todo = await get_todo_by_id(id)
+    if todo is None:
+        raise HTTPException(status_code=404, detail="Todo item not found")
+    await delete_todo_by_id(id)
+    return {"message": "Todo item deleted"}
