@@ -5,7 +5,7 @@ from bson import ObjectId
 
 
 async def create_todo(todo: TodoItem) -> dict:
-    result = await todo_collection.insert_one(todo.dict())
+    result = await todo_collection.insert_one(todo.model_dump())
     new_todo = await todo_collection.find_one({"_id": result.inserted_id})
     return new_todo
 
