@@ -1,6 +1,5 @@
 from app.database import todo_collection
 from app.models import TodoItem
-from motor.motor_asyncio import AsyncIOMotorCollection
 from bson import ObjectId
 
 

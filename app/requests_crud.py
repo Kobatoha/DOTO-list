@@ -16,7 +16,7 @@ else:
     print("Ошибка при создании задачи:", create_todo.text)
 
 
-todo_id = post_todo.json().get("id")
+todo_id = create_todo.json().get("id")
 
 get_todo = requests.get(f"{BASE_URL}{todo_id}")
 
@@ -51,3 +51,5 @@ if delete_todo.status_code == 200:
     print("Задача успешно удалена:", delete_todo.json())
 else:
     print("Ошибка при удалении задачи:", delete_todo.text)
+
+
